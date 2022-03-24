@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import autoCatch from '../../tools/autocatch';
 import * as jwt from "jsonwebtoken";
-// import * as hashJS from "hash.js";
+import * as hashJS from "hash.js";
 import { prisma } from '../../tools/prismaClient';
 
 const authSecret = 'a3163b2c60d5fde24df81289f87d';
@@ -17,9 +17,10 @@ export const authenticationRouterFactory = () => Router()
                     next({ statusCode: 400 });
                     return;
                 }
-                const user = await prisma.user.findUnique({
+                const user = await prisma.user.findFirst({
                     where: {
-                        email: username
+                        email: username,
+                        password: hashJS.sha256().update(String(password)).digest("hex")
                     }
                 });
 
