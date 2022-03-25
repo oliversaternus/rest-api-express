@@ -12,7 +12,8 @@ model User {
   email    String    @unique
   name     String?
   password String?
-  admin    Boolean   @default(false)
+  role     String    @default("user")
+  active   Boolean   @default(true)
   sessions Session[]
 }
 
