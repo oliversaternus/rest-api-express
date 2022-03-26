@@ -5,6 +5,8 @@ import { json } from 'body-parser';
 import { createServer, Server } from 'http';
 
 import { authenticationRouterFactory } from './modules/authentication/controller';
+import { fileRouterFactory } from './modules/files/controller';
+import { userRouterFactory } from './modules/users/controller';
 
 // define constants
 const testEnvironment = process.env.NODE_ENV === 'test';
@@ -16,6 +18,8 @@ app.use(json());
 app.use(cors());
 
 app.use("/authentication", authenticationRouterFactory());
+app.use("/files", fileRouterFactory());
+app.use("/users", userRouterFactory());
 
 app.use(strongErrorHandler({
     debug: false,

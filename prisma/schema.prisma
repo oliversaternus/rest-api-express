@@ -15,6 +15,7 @@ model User {
   role     String    @default("user")
   active   Boolean   @default(true)
   sessions Session[]
+  files    File[]
 }
 
 model Session {
@@ -25,4 +26,19 @@ model Session {
   updatedAt   DateTime @updatedAt
   initiator   User?    @relation(fields: [initiatorId], references: [id])
   initiatorId Int?
+}
+
+model File {
+  id          Int      @id @default(autoincrement())
+  url         String
+  name        String
+  caption     String
+  description String
+  size        Int
+  ext         String
+  mime        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdBy   User?    @relation(fields: [creatorId], references: [id])
+  creatorId   Int?
 }

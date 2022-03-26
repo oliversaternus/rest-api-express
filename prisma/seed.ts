@@ -5,23 +5,17 @@ const prisma = new PrismaClient()
 
 const userData: Prisma.UserCreateInput[] = [
   {
-    name: 'Alice',
-    email: 'alice@prisma.io',
+    name: 'Administrstor',
+    email: 'admin@test.com',
     password: hashJS.sha256().update('123456').digest("hex"),
     role: 'admin'
   },
   {
-    name: 'Nilu',
-    email: 'nilu@prisma.io',
+    name: 'User',
+    email: 'user@test.com',
     password: hashJS.sha256().update('123456').digest("hex"),
     role: 'user'
-  },
-  {
-    name: 'Mahmoud',
-    email: 'mahmoud@prisma.io',
-    password: hashJS.sha256().update('123456').digest("hex"),
-    role: 'user'
-  },
+  }
 ]
 
 async function main() {
