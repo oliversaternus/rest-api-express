@@ -2,7 +2,7 @@ import { Router } from 'express';
 import autoCatch from '../../tools/autocatch';
 import { autoVerifyUser } from '../authentication/tools';
 import { UploadedFile } from 'express-fileupload';
-import { fileService } from './service';
+import { FileService } from './service';
 import { prisma } from '../../tools/prismaClient';
 
 export const fileRouterFactory = () => Router()
@@ -37,7 +37,7 @@ export const fileRouterFactory = () => Router()
         autoCatch(
             autoVerifyUser()(
                 async (req, res, currentUser, next) => {
-                    const deletedId = await fileService.deleteFile(Number(req.params.id));
+                    const deletedId = await FileService.deleteFile(Number(req.params.id));
                     res.status(200).json({ deletedId });
                 }
             )
@@ -83,7 +83,7 @@ export const fileRouterFactory = () => Router()
                         return;
                     }
 
-                    const formattedFile = await fileService.saveFile(data, info, currentUser.id);
+                    const formattedFile = await FileService.saveFile(data, info, currentUser.id);
 
                     res.status(200).json(formattedFile);
                 }

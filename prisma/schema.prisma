@@ -42,3 +42,8 @@ model File {
   createdBy   User?    @relation(fields: [creatorId], references: [id])
   creatorId   Int?
 }
+
+model Store {
+  key   String @id
+  value String
+}

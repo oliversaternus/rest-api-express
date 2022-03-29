@@ -5,7 +5,7 @@ import { prisma } from '../../tools/prismaClient';
 
 export class FileService {
 
-    deleteFile = async (id?: number) => {
+    public static deleteFile = async (id?: number) => {
         if (!id) {
             return undefined;
         }
@@ -21,7 +21,7 @@ export class FileService {
         return deletedFile?.id;
     }
 
-    saveFile = async (data: UploadedFile, info: string, createdByUserId: number) => {
+    public static saveFile = async (data: UploadedFile, info: string, createdByUserId: number) => {
         const fileHash = generateId();
         const fileExtension = extension(data.mimetype);
         const fileInfo = JSON.parse(info);
@@ -48,7 +48,3 @@ export class FileService {
         return file;
     };
 }
-
-const fileService = new FileService();
-
-export { fileService }
