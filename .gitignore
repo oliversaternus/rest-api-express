@@ -5,3 +5,7 @@ prisma/dev.db
 prisma/dev.db-journal
 prisma/migrations
 prisma/.env
+
+prisma/test.db
+prisma/test.db-journal
+prisma/temp.env

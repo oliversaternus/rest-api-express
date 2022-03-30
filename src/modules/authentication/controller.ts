@@ -1,7 +1,8 @@
 import { Router } from 'express';
+import jwt from "jsonwebtoken";
+import hashJS from "hash.js";
+
 import autoCatch from '../../tools/autocatch';
-import * as jwt from "jsonwebtoken";
-import * as hashJS from "hash.js";
 import { prisma } from '../../tools/prismaClient';
 import { authSecret, autoVerifyRefresh, refreshSecret } from './tools';
 import { RefreshContext, UserContext } from './types';

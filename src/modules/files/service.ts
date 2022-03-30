@@ -1,6 +1,7 @@
 import { UploadedFile } from 'express-fileupload';
 import { v4 as generateId } from 'uuid';
 import { extension } from 'mime-types';
+
 import { prisma } from '../../tools/prismaClient';
 
 export class FileService {

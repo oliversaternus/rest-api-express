@@ -10,7 +10,9 @@
     "prestart": "npm run build",
     "start": "node .",
     "dev": "tsnd --respawn src/server.ts",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand",
+    "pree2e": "node scripts/e2ePrepare.js && prisma migrate dev --name test && node scripts/e2eCleanup.js",
+    "e2e": "jest ^.+\\.e2e.test.ts$ --runInBand"
   },
   "author": "",
   "license": "ISC",
@@ -34,6 +36,7 @@
     "eslint-plugin-prefer-arrow": "^1.2.3",
     "eslint-plugin-unicorn": "^41.0.0",
     "jest": "27.3.1",
+    "jest-mock-extended": "^2.0.4",
     "prisma": "3.11.0",
     "ts-jest": "27.0.7",
     "ts-node": "10.7.0",
@@ -50,7 +53,7 @@
     "hash.js": "1.1.7",
     "jsonwebtoken": "8.5.1",
     "mime-types": "2.1.34",
-    "node-fetch": "^3.2.3",
+    "node-fetch": "2.6.7",
     "qs": "6.10.1",
     "strong-error-handler": "3.2.0",
     "uuid": "8.3.2"

@@ -1,8 +1,11 @@
-import * as express from 'express';
-import * as strongErrorHandler from 'strong-error-handler';
-import * as cors from "cors";
-import { json } from 'body-parser';
+import express from 'express';
+import strongErrorHandler from 'strong-error-handler';
+import cors from "cors";
+import { json, urlencoded } from 'body-parser';
 import { createServer, Server } from 'http';
+import fileUpload from 'express-fileupload';
+import { join } from 'path';
+import { existsSync, mkdirSync } from 'fs';
 
 import { authenticationRouterFactory } from './modules/authentication/controller';
 import { fileRouterFactory } from './modules/files/controller';
@@ -11,15 +14,28 @@ import { userRouterFactory } from './modules/users/controller';
 // define constants
 const testEnvironment = process.env.NODE_ENV === 'test';
 const port = process.env.PORT || (testEnvironment ? 5050 : 5000);
+const tempPath = join(__dirname, '..', 'tmp');
+
+// setup temp path for file upload
+if (!existsSync(tempPath)) {
+    mkdirSync(tempPath);
+}
 
 // set up server app
 export const app = express();
 app.use(json());
 app.use(cors());
 
+app.use("/files", urlencoded({ extended: true }));
+app.use("/files", fileUpload({
+    limits: { fileSize: 50 * 1024 * 1024 },
+    useTempFiles: true,
+    tempFileDir: tempPath
+}));
+
 app.use("/authentication", authenticationRouterFactory());
-app.use("/files", fileRouterFactory());
 app.use("/users", userRouterFactory());
+app.use("/files", fileRouterFactory());
 
 app.use(strongErrorHandler({
     debug: false,

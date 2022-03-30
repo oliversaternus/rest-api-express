@@ -1,9 +1,11 @@
 import { Router } from 'express';
+import { UploadedFile } from 'express-fileupload';
+
+import { FileService } from './service';
+
+import { prisma } from '../../tools/prismaClient';
 import autoCatch from '../../tools/autocatch';
 import { autoVerifyUser } from '../authentication/tools';
-import { UploadedFile } from 'express-fileupload';
-import { FileService } from './service';
-import { prisma } from '../../tools/prismaClient';
 
 export const fileRouterFactory = () => Router()
 

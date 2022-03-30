@@ -1,9 +1,10 @@
 import { Router } from 'express';
+import * as hashJS from "hash.js";
+
 import autoCatch from '../../tools/autocatch';
 import { autoVerifyUser } from '../authentication/tools';
-import * as hashJS from "hash.js";
 import { UserRole } from '../authentication/types';
-import { prisma } from '../../tools/prismaClient';
+import { prisma } from '../../tools/prismaClient'
 
 export const userRouterFactory = () => Router()
 
@@ -98,6 +99,7 @@ export const userRouterFactory = () => Router()
                 async (req, res, currentUser, next) => {
                     const { name, email, password, role, active } = req.body;
 
+                    // QUESTION: Is this validated in runtime?
                     const user = await prisma.user.create({
                         data: {
                             name: String(name),

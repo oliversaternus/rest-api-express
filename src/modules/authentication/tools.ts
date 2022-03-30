@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import * as jwt from "jsonwebtoken";
-import * as hashJS from "hash.js";
+import jwt from "jsonwebtoken";
+import hashJS from "hash.js";
+
 import { UserRole, UserContext, RefreshContext } from "./types";
 
 const baseSecret = 'a3163b2c60d5fde24df81289f87d';
