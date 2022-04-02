@@ -17,7 +17,7 @@ afterAll(async () => {
 
 describe('test authentication', () => {
     test('wrong password', async () => {
-        const response = await client.invokeApi('POST', '/login', {
+        const response = await client.invokeApi('POST', '/authentication/login', {
             username: 'admin@test.com',
             password: 'abcdefg'
         })

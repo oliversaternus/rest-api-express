@@ -10,9 +10,9 @@
     "prestart": "npm run build",
     "start": "node .",
     "dev": "tsnd --respawn src/server.ts",
-    "test": "jest --runInBand",
+    "test": "jest unit --runInBand",
     "pree2e": "node scripts/e2ePrepare.js && prisma migrate dev --name test && node scripts/e2eCleanupPrepare.js",
-    "e2e": "jest ^.+\\.e2e.test.ts$ --runInBand || node scripts/e2eCleanup.js"
+    "e2e": "jest e2e --runInBand || node scripts/e2eCleanup.js"
   },
   "author": "",
   "license": "ISC",
