@@ -34,6 +34,7 @@ model File {
   name        String
   caption     String
   description String
+  hash        String
   size        Int
   ext         String
   mime        String

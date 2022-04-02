@@ -6,6 +6,7 @@ import { createServer, Server } from 'http';
 import fileUpload from 'express-fileupload';
 import { join } from 'path';
 import { existsSync, mkdirSync } from 'fs';
+import 'dotenv/config';
 
 import { authenticationRouterFactory } from './modules/authentication/controller';
 import { fileRouterFactory } from './modules/files/controller';
@@ -26,7 +27,7 @@ export const app = express();
 app.use(json());
 app.use(cors());
 
-app.use("/files", urlencoded({ extended: true }));
+app.use("/files", urlencoded({ extended: true, limit: '50mb' }));
 app.use("/files", fileUpload({
     limits: { fileSize: 50 * 1024 * 1024 },
     useTempFiles: true,
