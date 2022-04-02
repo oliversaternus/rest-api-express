@@ -49,7 +49,7 @@ export const autoVerifyRefresh = () => (input: (req: Request, res: Response, use
     return async (req, res, next) => {
         const { refreshToken } = req.body;
         if (!refreshToken) {
-            next({ statusCode: 400 });
+            next({ statusCode: 401 });
             return;
         }
         const userRefresh = decryptRefresh(refreshToken);

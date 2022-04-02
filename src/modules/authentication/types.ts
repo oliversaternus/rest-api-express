@@ -13,3 +13,21 @@ export interface UserContext {
     id: number;
     role: UserRole;
 }
+
+export interface LoginRequestBody {
+    password: string;
+    username: string;
+}
+
+export interface LoginResponse {
+    token: string;
+    refreshToken: string;
+}
+
+export interface RefreshResponse {
+    token: string;
+}
+
+export interface LogoutResponse {
+    message: string;
+}

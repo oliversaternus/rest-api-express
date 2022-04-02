@@ -11,8 +11,8 @@
     "start": "node .",
     "dev": "tsnd --respawn src/server.ts",
     "test": "jest unit --runInBand",
-    "pree2e": "node scripts/e2ePrepare.js && prisma migrate dev --name test && node scripts/e2eCleanupPrepare.js",
-    "e2e": "jest e2e --runInBand || node scripts/e2eCleanup.js"
+    "pree2e": "node scripts/e2ePrepare.js && prisma migrate dev --name test && node scripts/e2eSeed.js",
+    "e2e": "jest e2e --runInBand && node scripts/e2eCleanup.js || node scripts/e2eCleanup.js"
   },
   "author": "",
   "license": "ISC",
