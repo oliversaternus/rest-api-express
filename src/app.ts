@@ -6,16 +6,21 @@ import { createServer, Server } from 'http';
 import fileUpload from 'express-fileupload';
 import { join } from 'path';
 import { existsSync, mkdirSync } from 'fs';
-import 'dotenv/config';
-
-import { authenticationRouterFactory } from './modules/authentication/controller';
-import { fileRouterFactory } from './modules/files/controller';
-import { userRouterFactory } from './modules/users/controller';
+import dotenv from 'dotenv';
 
 // define constants
 const testEnvironment = process.env.NODE_ENV === 'test';
 const port = process.env.PORT || (testEnvironment ? 5050 : 5000);
 const tempPath = join(__dirname, '..', 'tmp');
+const envPath = join(__dirname, '..', testEnvironment ? 'dev.env' : '.env');
+
+// setup environment variables
+dotenv.config({ path: envPath });
+
+// environment variables need to be present when modules are loaded
+import { authenticationRouterFactory } from './modules/authentication/controller';
+import { fileRouterFactory } from './modules/files/controller';
+import { userRouterFactory } from './modules/users/controller';
 
 // setup temp path for file upload
 if (!existsSync(tempPath)) {

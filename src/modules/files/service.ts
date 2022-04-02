@@ -7,17 +7,19 @@ import { createReadStream } from 'fs';
 import { prisma } from '../../tools/prismaClient';
 
 const s3Bucket = process.env.S3_BUCKET;
-const region = process.env.S3_REGION;
 const endpoint = process.env.S3_ENDPOINT;
+const region = process.env.S3_REGION;
 const s3AccessKey = process.env.S3_ACCESS_KEY;
 const s3SecretKey = process.env.S3_SECRET_KEY;
+const forcePathStyle = !!process.env.S3_FORCE_PATH_STYLE;
+const publicBucketAddress = process.env.S3_PUBLIC_BUCKET_ADDRESS;
 
 const credentials = {
     accessKeyId: String(s3AccessKey),
     secretAccessKey: String(s3SecretKey)
 }
 
-const client = new S3Client({ region, endpoint, credentials });
+const client = new S3Client({ region, endpoint, credentials, forcePathStyle });
 
 export class FileService {
 
@@ -88,7 +90,7 @@ export class FileService {
                 mime: data.mimetype,
                 description: fileInfo.description,
                 caption: fileInfo.caption,
-                url: `${endpoint}/${s3Bucket}/${fileHash}.${fileExtension}`,
+                url: publicBucketAddress ? `${publicBucketAddress}/${fileHash}.${fileExtension}` : undefined,
                 creatorId: createdByUserId,
             }
         })
