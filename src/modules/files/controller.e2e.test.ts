@@ -21,7 +21,7 @@ afterAll(async () => {
 });
 
 describe('test files', () => {
-    test('create a file', async () => {
+    test('create and delete file', async () => {
         const loginResponse = await client.invokeApi<LoginResponse>('POST', '/authentication/login', {
             username: 'admin@test.com',
             password: '123456'
@@ -47,5 +47,11 @@ describe('test files', () => {
 
         const downloadedBuffer = await downloadResponse.buffer();
         expect(downloadedBuffer.byteLength).toEqual(createResponse.data?.size);
+
+        const deleteResponse = await client.invokeApi('DELETE', `/files/${createResponse.data?.id}`);
+        expect(deleteResponse.status).toBe(200);
+
+        const downloadDeletedResponse = await fetch(String(createResponse.data?.url));
+        expect(downloadDeletedResponse.status).not.toBe(200);
     });
 });

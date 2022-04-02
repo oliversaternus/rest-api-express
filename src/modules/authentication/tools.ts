@@ -4,7 +4,7 @@ import hashJS from "hash.js";
 
 import { UserRole, UserContext, RefreshContext } from "./types";
 
-const baseSecret = 'a3163b2c60d5fde24df81289f87d';
+const baseSecret = process.env.BASE_SECRET;
 
 export const authSecret = hashJS.sha256().update(baseSecret).digest("hex");
 export const refreshSecret = hashJS.sha256().update(authSecret).digest("hex")

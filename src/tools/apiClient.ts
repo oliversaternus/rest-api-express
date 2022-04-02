@@ -11,7 +11,7 @@ export class APIClient {
         this.baseUrl = baseUrl;
     }
 
-    invokeApi = async <T>(method: 'GET' | 'POST' | 'PUT' | 'DELETE', path: string, body?: any, query?: any, auth?: boolean) => {
+    invokeApi = async <T>(method: 'GET' | 'POST' | 'PUT' | 'DELETE', path: string, body?: any, query?: any, auth: boolean = true) => {
         let data: T | undefined;
         let status: number | undefined;
         try {
