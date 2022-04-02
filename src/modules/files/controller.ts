@@ -85,9 +85,14 @@ export const fileRouterFactory = () => Router()
                         return;
                     }
 
-                    const formattedFile = await FileService.saveFile(data, info, currentUser.id);
+                    const file = await FileService.saveFile(data, info, currentUser.id);
 
-                    res.status(200).json(formattedFile);
+                    if(!file){
+                        next({ statusCode: 500, message: 'File could not be saved' });
+                        return;
+                    }
+
+                    res.status(200).json(file);
                 }
             )
         )
