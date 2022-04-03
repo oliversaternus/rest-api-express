@@ -6,6 +6,7 @@ import { FileService } from './service';
 import { prisma } from '../../tools/prismaClient';
 import autoCatch from '../../tools/autocatch';
 import { autoVerifyUser } from '../authentication/tools';
+import { Prisma } from '@prisma/client';
 
 export const fileRouterFactory = () => Router()
 
@@ -13,7 +14,13 @@ export const fileRouterFactory = () => Router()
         autoCatch(
             autoVerifyUser()(
                 async (req, res) => {
-                    const files = prisma.file.findMany();
+                    const { skip, limit, where, orderBy } = req.query;
+                    const files = await prisma.file.findMany({
+                        orderBy: orderBy as Prisma.Enumerable<Prisma.FileOrderByWithRelationInput>,
+                        where: where as Prisma.FileWhereInput,
+                        skip: Number(skip || 0),
+                        take: Number(limit || 24),
+                    });
                     res.status(200).json({ items: files });
                 }
             )
@@ -87,7 +94,7 @@ export const fileRouterFactory = () => Router()
 
                     const file = await FileService.saveFile(data, info, currentUser.id);
 
-                    if(!file){
+                    if (!file) {
                         next({ statusCode: 500, message: 'File could not be saved' });
                         return;
                     }

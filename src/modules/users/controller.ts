@@ -5,6 +5,7 @@ import autoCatch from '../../tools/autocatch';
 import { autoVerifyUser } from '../authentication/tools';
 import { UserRole } from '../authentication/types';
 import { prisma } from '../../tools/prismaClient'
+import { Prisma } from '@prisma/client';
 
 export const userRouterFactory = () => Router()
 
@@ -12,7 +13,15 @@ export const userRouterFactory = () => Router()
         autoCatch(
             autoVerifyUser([UserRole.Admin])(
                 async (req, res, currentUser, next) => {
+                    const { skip, limit, where = {}, orderBy } = req.query;
                     const users = await prisma.user.findMany({
+                        orderBy: orderBy as Prisma.Enumerable<Prisma.FileOrderByWithRelationInput>,
+                        where: {
+                            ...(where as Prisma.FileWhereInput),
+                            password: undefined
+                        },
+                        skip: Number(skip || 0),
+                        take: Number(limit || 24),
                         select: {
                             id: true,
                             email: true,
