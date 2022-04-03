@@ -1,7 +1,7 @@
 import { prisma } from '../../tools/prismaClient';
 
-export class StoreService {
-    public static getValue = async (key: string) => {
+export const StoreService = {
+    getValue: async (key: string) => {
         const item = await prisma.store.findUnique({
             where: {
                 key
@@ -9,18 +9,23 @@ export class StoreService {
         });
 
         return item ? JSON.parse(item.value) : undefined;
-    }
-    public static setValue = async (key: string, value: any) => {
-        await prisma.store.update({ 
+    },
+    setValue: async (key: string, value: any) => {
+        const valueString = JSON.stringify(value);
+        await prisma.store.upsert({
             where: {
                 key
             },
-            data: {
-                value: JSON.stringify(value)
+            update: {
+                value: valueString
+            },
+            create: {
+                key,
+                value: valueString
             }
         });
-    }
-    public static deleteValue = async (key: string) => {
+    },
+    deleteValue: async (key: string) => {
         await prisma.store.delete({
             where: {
                 key
