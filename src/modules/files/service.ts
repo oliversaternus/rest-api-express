@@ -19,11 +19,10 @@ const credentials = {
     secretAccessKey: String(s3SecretKey)
 }
 
-const client = new S3Client({ region, endpoint, credentials, forcePathStyle });
+const s3Client = new S3Client({ region, endpoint, credentials, forcePathStyle });
 
-export class FileService {
-
-    public static deleteFile = async (id?: number) => {
+export const FileService = {
+    deleteFile: async (id?: number) => {
         if (!id) {
             return undefined;
         }
@@ -38,7 +37,7 @@ export class FileService {
             return undefined;
         }
 
-        const deleteResponse = await client.send(new DeleteObjectCommand({
+        const deleteResponse = await s3Client.send(new DeleteObjectCommand({
             Bucket: s3Bucket,
             Key: `${file.hash}.${file.ext}`,
         }));
@@ -56,9 +55,8 @@ export class FileService {
         })
 
         return deletedFile?.id;
-    }
-
-    public static saveFile = async (data: UploadedFile, info: string, createdByUserId: number) => {
+    },
+    saveFile: async (data: UploadedFile, info: string, createdByUserId: number) => {
         const fileHash = generateId();
         const fileExtension = extension(data.mimetype);
         const fileInfo = JSON.parse(info);
@@ -69,7 +67,7 @@ export class FileService {
 
         const fileStream = createReadStream(data.tempFilePath);
 
-        const putResponse = await client.send(new PutObjectCommand({
+        const putResponse = await s3Client.send(new PutObjectCommand({
             Bucket: s3Bucket,
             Key: `${fileHash}.${fileExtension}`,
             Body: fileStream
@@ -96,5 +94,5 @@ export class FileService {
         })
 
         return file;
-    };
+    }
 }

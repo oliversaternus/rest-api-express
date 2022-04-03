@@ -32,7 +32,7 @@ export const app = express();
 app.use(json());
 app.use(cors());
 
-app.use("/files", urlencoded({ extended: true, limit: '50mb' }));
+app.use("/files", urlencoded({ extended: true }));
 app.use("/files", fileUpload({
     limits: { fileSize: 50 * 1024 * 1024 },
     useTempFiles: true,
