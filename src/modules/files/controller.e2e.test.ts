@@ -25,7 +25,7 @@ describe('test files', () => {
 
         // LOGIN
         const loginResponse = await client.invokeApi<LoginResponse>('POST', '/authentication/login', {
-            username: 'admin@test.com',
+            username: 'johndoe@test.com',
             password: '123456'
         }, undefined, false);
 
@@ -80,7 +80,7 @@ describe('test files', () => {
 
         // LOGIN
         const loginResponse = await client.invokeApi<LoginResponse>('POST', '/authentication/login', {
-            username: 'admin@test.com',
+            username: 'johndoe@test.com',
             password: '123456'
         }, undefined, false);
 

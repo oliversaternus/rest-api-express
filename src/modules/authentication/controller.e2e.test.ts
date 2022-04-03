@@ -19,7 +19,7 @@ afterAll(async () => {
 describe('test authentication', () => {
     test('wrong password', async () => {
         const response = await client.invokeApi<LoginResponse>('POST', '/authentication/login', {
-            username: 'admin@test.com',
+            username: 'johndoe@test.com',
             password: 'abcdefg'
         })
         expect(response?.status).toBe(401);
@@ -27,7 +27,7 @@ describe('test authentication', () => {
 
     test('successfull login', async () => {
         const response = await client.invokeApi<LoginResponse>('POST', '/authentication/login', {
-            username: 'admin@test.com',
+            username: 'johndoe@test.com',
             password: '123456'
         })
         expect(response?.status).toBe(200);
@@ -49,7 +49,7 @@ describe('test authentication', () => {
 
     test('login logout and refresh', async () => {
         const loginResponse = await client.invokeApi<LoginResponse>('POST', '/authentication/login', {
-            username: 'admin@test.com',
+            username: 'johndoe@test.com',
             password: '123456'
         })
         expect(loginResponse?.status).toBe(200);

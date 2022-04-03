@@ -13,11 +13,14 @@ export const fileRouterFactory = () => Router()
     .get('/',
         autoCatch(
             autoVerifyUser()(
-                async (req, res) => {
-                    const { skip, limit, where, orderBy } = req.query;
+                async (req, res, currentUser) => {
+                    const { skip, limit, where = {}, orderBy } = req.query;
                     const files = await prisma.file.findMany({
                         orderBy: orderBy as Prisma.Enumerable<Prisma.FileOrderByWithRelationInput>,
-                        where: where as Prisma.FileWhereInput,
+                        where: {
+                            ...(where as Prisma.FileWhereInput),
+                            creatorId: currentUser.id
+                        },
                         skip: Number(skip || 0),
                         take: Number(limit || 24),
                     });
@@ -31,9 +34,10 @@ export const fileRouterFactory = () => Router()
         autoCatch(
             autoVerifyUser()(
                 async (req, res, currentUser, next) => {
-                    const file = await prisma.file.findUnique({
+                    const file = await prisma.file.findFirst({
                         where: {
-                            id: Number(req.params.id)
+                            id: Number(req.params.id),
+                            creatorId: currentUser.id
                         }
                     })
                     file ? res.json(file) : res.status(201).send();
@@ -46,7 +50,7 @@ export const fileRouterFactory = () => Router()
         autoCatch(
             autoVerifyUser()(
                 async (req, res, currentUser, next) => {
-                    const deletedId = await FileService.deleteFile(Number(req.params.id));
+                    const deletedId = await FileService.deleteFile(Number(req.params.id), currentUser.id);
                     res.status(200).json({ deletedId });
                 }
             )
@@ -59,20 +63,28 @@ export const fileRouterFactory = () => Router()
                 async (req, res, currentUser, next) => {
                     const { caption, description } = req.body;
 
-                    const updatedFile = await prisma.file.update({
+                    const updatedFiles = await prisma.file.updateMany({
                         where: {
-                            id: Number(req.params.id)
+                            id: Number(req.params.id),
+                            creatorId: currentUser.id
                         },
                         data: {
                             ...(caption && { caption }),
                             ...(description && { description })
                         }
-                    })
+                    });
 
-                    if (!updatedFile) {
+                    if (!updatedFiles.count) {
                         next({ statusCode: 404 });
                         return;
                     }
+
+                    const updatedFile = await prisma.file.findFirst({
+                        where: {
+                            id: Number(req.params.id),
+                            creatorId: currentUser.id
+                        }
+                    });
 
                     res.status(200).json(updatedFile);
                 }

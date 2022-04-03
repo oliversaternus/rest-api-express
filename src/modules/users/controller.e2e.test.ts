@@ -22,7 +22,7 @@ describe('test users', () => {
 
         // LOGIN
         const loginResponse = await client.invokeApi<LoginResponse>('POST', '/authentication/login', {
-            username: 'admin@test.com',
+            username: 'johndoe@test.com',
             password: '123456'
         }, undefined, false);
 
@@ -32,6 +32,6 @@ describe('test users', () => {
         const currentUserResponse = await client.invokeApi<User>('GET', '/users/me');
 
         expect(currentUserResponse.status).toBe(200);
-        expect(currentUserResponse.data?.email).toBe('admin@test.com');
+        expect(currentUserResponse.data?.email).toBe('johndoe@test.com');
     });
 });

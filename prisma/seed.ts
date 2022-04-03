@@ -6,7 +6,7 @@ const prisma = new PrismaClient()
 const userData: Prisma.UserCreateInput[] = [
   {
     name: 'Administrstor',
-    email: 'admin@test.com',
+    email: 'johndoe@test.com',
     password: hashJS.sha256().update('123456').digest("hex"),
     role: 'admin'
   },

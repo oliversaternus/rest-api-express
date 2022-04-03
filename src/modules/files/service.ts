@@ -22,14 +22,15 @@ const credentials = {
 const s3Client = new S3Client({ region, endpoint, credentials, forcePathStyle });
 
 export const FileService = {
-    deleteFile: async (id?: number) => {
-        if (!id) {
+    deleteFile: async (id: number, userId: number) => {
+        if (!id || !userId) {
             return undefined;
         }
 
-        const file = await prisma.file.findUnique({
+        const file = await prisma.file.findFirst({
             where: {
-                id
+                id,
+                creatorId: userId
             }
         });
 
@@ -56,7 +57,7 @@ export const FileService = {
 
         return deletedFile?.id;
     },
-    saveFile: async (data: UploadedFile, info: string, createdByUserId: number) => {
+    saveFile: async (data: UploadedFile, info: string, userId: number) => {
         const fileHash = generateId();
         const fileExtension = extension(data.mimetype);
         const fileInfo = JSON.parse(info);
@@ -89,7 +90,7 @@ export const FileService = {
                 description: fileInfo.description,
                 caption: fileInfo.caption,
                 url: publicBucketAddress ? `${publicBucketAddress}/${fileHash}.${fileExtension}` : undefined,
-                creatorId: createdByUserId,
+                creatorId: userId,
             }
         })
 

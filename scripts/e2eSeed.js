@@ -5,20 +5,20 @@ const prisma = new PrismaClient()
 
 const userData = [
     {
-        name: 'Administrstor',
-        email: 'admin@test.com',
+        name: 'John Doe',
+        email: 'johndoe@test.com',
         password: hashJS.sha256().update('123456').digest("hex"),
         role: 'admin'
     },
     {
-        name: 'User',
-        email: 'user@test.com',
-        password: hashJS.sha256().update('123456').digest("hex"),
-        role: 'user'
+        name: 'Jane Doe',
+        email: 'janedoe@test.com',
+        password: hashJS.sha256().update('654321').digest("hex"),
+        role: 'admin'
     }
 ]
 
-const filesData = [
+const johnFilesData = [
     {
         name: 'Bananas',
         caption: '1 yellow bananas',
@@ -59,15 +59,22 @@ const filesData = [
 
 async function main() {
     console.log(`Start seeding ...`)
+    let johnDoeUserId = 0;
     for (const user of userData) {
         const createdUser = await prisma.user.create({
             data: user,
         })
+        if (createdUser.name === 'John Doe') {
+            johnDoeUserId = createdUser.id;
+        }
         console.log(`Created user with id: ${createdUser.id}`)
     }
-    for (const file of filesData) {
+    for (const file of johnFilesData) {
         const createdFile = await prisma.file.create({
-            data: file,
+            data: {
+                ...file,
+                creatorId: johnDoeUserId
+            },
         })
         console.log(`Created file with id: ${createdFile.id}`)
     }
