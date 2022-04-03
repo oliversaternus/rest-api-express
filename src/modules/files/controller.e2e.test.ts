@@ -87,34 +87,6 @@ describe('test files', () => {
         client.authToken = String(loginResponse.data?.token);
         client.refreshToken = String(loginResponse.data?.refreshToken);
 
-        // CREATE Files
-        const imageBuffer = readFileSync(join(__dirname, '..', '..', '..', 'assets', 'banana.jpg'));
-        const firstFileResponse = await client.upload<File>('POST', '/files', imageBuffer, 'banana', 'image/jpeg',
-            {
-                description: 'first file',
-                caption: '1 yellow bananas'
-            });
-        const secondFileResponse = await client.upload<File>('POST', '/files', imageBuffer, 'banana', 'image/jpeg',
-            {
-                description: 'second file',
-                caption: '2 bananas'
-            });
-        const thirdFileResponse = await client.upload<File>('POST', '/files', imageBuffer, 'banana', 'image/jpeg',
-            {
-                description: 'third file',
-                caption: '3 bananas'
-            });
-        const fourthFileResponse = await client.upload<File>('POST', '/files', imageBuffer, 'banana', 'image/jpeg',
-            {
-                description: 'fourth file',
-                caption: 'fruits'
-            });
-
-        expect(firstFileResponse.status).toBe(200);
-        expect(secondFileResponse.status).toBe(200);
-        expect(thirdFileResponse.status).toBe(200);
-        expect(fourthFileResponse.status).toBe(200);
-
         // Query files
         const firstQueryResponse = await client.invokeApi<{ items: File[] }>('GET', '/files', undefined, {
             where: {
@@ -132,16 +104,5 @@ describe('test files', () => {
         expect(firstQueryResponse.data?.items[0].caption).toBe('3 bananas');
         expect(firstQueryResponse.data?.items[1].caption).toBe('2 bananas');
         expect(firstQueryResponse.data?.items[2].caption).toBe('1 yellow bananas');
-
-        // DELETE
-        const deleteFirstResponse = await client.invokeApi('DELETE', `/files/${firstFileResponse.data?.id}`);
-        const deleteSecondResponse = await client.invokeApi('DELETE', `/files/${secondFileResponse.data?.id}`);
-        const deleteThirdResponse = await client.invokeApi('DELETE', `/files/${thirdFileResponse.data?.id}`);
-        const deleteFourthResponse = await client.invokeApi('DELETE', `/files/${fourthFileResponse.data?.id}`);
-
-        expect(deleteFirstResponse.status).toBe(200);
-        expect(deleteSecondResponse.status).toBe(200);
-        expect(deleteThirdResponse.status).toBe(200);
-        expect(deleteFourthResponse.status).toBe(200);
     });
 });
