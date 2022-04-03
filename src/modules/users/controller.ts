@@ -3,9 +3,38 @@ import * as hashJS from "hash.js";
 
 import autoCatch from '../../tools/autocatch';
 import { autoVerifyUser } from '../authentication/tools';
+import { UserRole } from '../authentication/types';
 import { prisma } from '../../tools/prismaClient'
+import { Prisma } from '@prisma/client';
 
 export const userRouterFactory = () => Router()
+
+    .get('/',
+        autoCatch(
+            autoVerifyUser([UserRole.Admin])(
+                async (req, res, currentUser, next) => {
+                    const { skip, limit, where = {}, orderBy } = req.query;
+                    const users = await prisma.user.findMany({
+                        orderBy: orderBy as Prisma.Enumerable<Prisma.FileOrderByWithRelationInput>,
+                        where: {
+                            ...(where as Prisma.FileWhereInput),
+                            password: undefined
+                        },
+                        skip: Number(skip || 0),
+                        take: Number(limit || 24),
+                        select: {
+                            id: true,
+                            email: true,
+                            name: true,
+                            role: true,
+                            active: true
+                        }
+                    });
+                    res.json({ items: users });
+                }
+            )
+        )
+    )
 
     .get('/me',
         autoCatch(
@@ -14,6 +43,28 @@ export const userRouterFactory = () => Router()
                     const user = await prisma.user.findUnique({
                         where: {
                             id: currentUser.id
+                        },
+                        select: {
+                            id: true,
+                            email: true,
+                            name: true,
+                            role: true,
+                            sessions: true
+                        }
+                    })
+                    res.json(user);
+                }
+            )
+        )
+    )
+
+    .get('/:id',
+        autoCatch(
+            autoVerifyUser([UserRole.Admin])(
+                async (req, res, currentUser, next) => {
+                    const user = await prisma.user.findUnique({
+                        where: {
+                            id: Number(req.params.id)
                         },
                         select: {
                             id: true,
@@ -88,6 +139,35 @@ export const userRouterFactory = () => Router()
                         data: {
                             ...(!!name && { name: String(name) }),
                             ...(!!email && { email: String(email) })
+                        }
+                    })
+
+                    if (!updatedUser) {
+                        next({ statusCode: 404 });
+                        return;
+                    }
+
+                    res.json({ updatedId: updatedUser.id });
+                }
+            )
+        )
+    )
+
+    .put('/:id',
+        autoCatch(
+            autoVerifyUser([UserRole.Admin])(
+                async (req, res, currentUser, next) => {
+                    const { name, email, role, active } = req.body;
+
+                    const updatedUser = await prisma.user.update({
+                        where: {
+                            id: currentUser.id
+                        },
+                        data: {
+                            ...(!!name && { name: String(name) }),
+                            ...(!!email && { email: String(email) }),
+                            ...(active !== undefined && { active: Boolean(active) }),
+                            ...(!!role && { role: role === UserRole.Admin ? UserRole.Admin : UserRole.User })
                         }
                     })
 

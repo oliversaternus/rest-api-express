@@ -22,15 +22,14 @@ const credentials = {
 const s3Client = new S3Client({ region, endpoint, credentials, forcePathStyle });
 
 export const FileService = {
-    deleteFile: async (id: number, userId: number) => {
-        if (!id || !userId) {
+    deleteFile: async (id: number) => {
+        if (!id) {
             return undefined;
         }
 
-        const file = await prisma.file.findFirst({
+        const file = await prisma.file.findUnique({
             where: {
-                id,
-                creatorId: userId
+                id
             }
         });
 
