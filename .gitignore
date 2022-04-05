@@ -12,3 +12,4 @@ prisma/.env
 prisma/test.db
 prisma/test.db-journal
 prisma/temp.env
+prisma/temp-migrations
