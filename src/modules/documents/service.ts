@@ -26,10 +26,10 @@ export const close = async () => {
 }
 
 export const DocumentGeneratorService = {
-    generatePDF: async () => {
+    generatePDF: async (html: string) => {
         try {
-            await page.goto('https://news.ycombinator.com', {
-                waitUntil: 'networkidle0',
+            await page.goto(`data:text/html,${html}`, {
+                waitUntil: ['domcontentloaded', 'load', 'networkidle0'],
             });
             await page.pdf({ path: 'hn.pdf', format: 'a4' });
         } catch (e) { }
