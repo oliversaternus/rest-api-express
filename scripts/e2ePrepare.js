@@ -12,5 +12,7 @@ if (existsSync(testDbPath)) {
 if (existsSync(testDbJournalPath)) {
     unlinkSync(testDbJournalPath);
 }
-renameSync(prismaEnvPath, tempPrismaEnvPath);
+if (existsSync(prismaEnvPath)) {
+    renameSync(prismaEnvPath, tempPrismaEnvPath);
+}
 writeFileSync(prismaEnvPath, 'DATABASE_URL=file:./test.db')

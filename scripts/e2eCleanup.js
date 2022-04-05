@@ -12,6 +12,7 @@ if (existsSync(testDbPath)) {
 if (existsSync(testDbJournalPath)) {
     unlinkSync(testDbJournalPath);
 }
-
+if (existsSync(tempPrismaEnvPath)) {
+    renameSync(tempPrismaEnvPath, prismaEnvPath);
+}
 unlinkSync(prismaEnvPath);
-renameSync(tempPrismaEnvPath, prismaEnvPath);
