@@ -4,10 +4,12 @@ import fs from "fs";
 import handlebars from "handlebars";
 import path from "path";
 import { marked } from 'marked';
+import queue from 'queue';
 
 let browser: Browser;
 let page: Page;
 let templates: Partial<{ [key in TemplateKeys]: handlebars.TemplateDelegate<TemplateProps[key]> }> = {};
+let tasks: queue;
 
 const renderMarkdown = <T>(object: T, array?: boolean) => {
     const resultObject = array ? [] : {};
@@ -37,6 +39,7 @@ export const init = async () => {
 
     browser = await puppeteer.launch();
     page = await browser.newPage();
+    tasks = queue({ autostart: true });
 };
 
 export const close = async () => {
@@ -45,15 +48,22 @@ export const close = async () => {
 
 export const DocumentGeneratorService = {
     generatePDF: async <TemplateKey extends TemplateKeys>(template: TemplateKey, props: TemplateProps[TemplateKey]) => {
-        try {
-            const htmlContent = templates[template]?.(renderMarkdown(props) as any);
-            if (!htmlContent) {
-                return;
-            }
-            await page.goto(`data:text/html,${htmlContent}`, {
-                waitUntil: ['domcontentloaded', 'load', 'networkidle0'],
+        return new Promise((resolve, reject) => {
+            tasks.push(async () => {
+                try {
+                    const htmlContent = templates[template]?.(renderMarkdown(props) as any);
+                    if (!htmlContent) {
+                        return;
+                    }
+                    await page.goto(`data:text/html,${htmlContent}`, {
+                        waitUntil: ['domcontentloaded', 'load', 'networkidle0'],
+                    });
+                    await page.pdf({ path: 'hn.pdf', format: 'a4' });
+                    resolve('hn.pdf');
+                } catch (e) {
+                    resolve(undefined)
+                }
             });
-            await page.pdf({ path: 'hn.pdf', format: 'a4' });
-        } catch (e) { }
+        })
     }
 }

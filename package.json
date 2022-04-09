@@ -63,6 +63,7 @@
     "nodemailer": "^6.7.3",
     "puppeteer": "^13.5.2",
     "qs": "6.10.1",
+    "queue": "^6.0.2",
     "strong-error-handler": "3.2.0",
     "uuid": "8.3.2"
   }
