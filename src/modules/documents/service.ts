@@ -9,13 +9,15 @@ let browser: Browser;
 let page: Page;
 let templates: Partial<{ [key in TemplateKeys]: handlebars.TemplateDelegate<TemplateProps[key]> }> = {};
 
-const renderMarkdown = <T>(object: T) => {
-    const resultObject = {};
+const renderMarkdown = <T>(object: T, array?: boolean) => {
+    const resultObject = array ? [] : {};
     const entries = Object.entries(object);
     for (const [key, value] of entries) {
         if (key.startsWith('html_') && typeof value === 'string') {
             resultObject[key] = marked.parse(value);
-        } else if (value && typeof value === 'object') {
+        } else if (Array.isArray(value)) {
+            resultObject[key] = renderMarkdown(value, true);
+        } else if (value instanceof Object) {
             resultObject[key] = renderMarkdown(value);
         } else {
             resultObject[key] = value;
