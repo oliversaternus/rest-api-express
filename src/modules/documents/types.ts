@@ -16,6 +16,6 @@ export type TemplateProps = {
             street: string;
         };
         date: string;
-        htmlContent: string;
+        html_Content: string;
     }
 }

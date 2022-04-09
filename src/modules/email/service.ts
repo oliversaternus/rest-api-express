@@ -35,11 +35,11 @@ export const init = () => {
 
 export const EmailService = {
     sendEmail: async <TemplateKey extends TemplateKeys>(template: TemplateKey, props: TemplateProps[TemplateKey], subject: string, recipient: string) => {
-        const htmlContent = templates[template]?.(props as any);
-        if (!htmlContent) {
-            return;
-        }
         try {
+            const htmlContent = templates[template]?.(props as any);
+            if (!htmlContent) {
+                return;
+            }
             const sentMessageInfo = await mailTransporter.sendMail({
                 from: smtpEmailAddress,
                 html: htmlContent,

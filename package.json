@@ -23,6 +23,7 @@
     "@types/express-fileupload": "1.1.7",
     "@types/jest": "26.0.4",
     "@types/jsonwebtoken": "8.5.0",
+    "@types/marked": "^4.0.3",
     "@types/mime-types": "2.1.1",
     "@types/node-fetch": "2.5.7",
     "@types/nodemailer": "^6.4.4",

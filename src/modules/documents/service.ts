@@ -3,10 +3,26 @@ import { TemplateKeys, TemplateProps } from "./types";
 import fs from "fs";
 import handlebars from "handlebars";
 import path from "path";
+import { marked } from 'marked';
 
 let browser: Browser;
 let page: Page;
-let templates: Partial<{ [key in TemplateKeys]: handlebars.TemplateDelegate<TemplateProps[key]> }> = {}
+let templates: Partial<{ [key in TemplateKeys]: handlebars.TemplateDelegate<TemplateProps[key]> }> = {};
+
+const renderMarkdown = <T>(object: T) => {
+    const resultObject = {};
+    const entries = Object.entries(object);
+    for (const [key, value] of entries) {
+        if (key.startsWith('html_') && typeof value === 'string') {
+            resultObject[key] = marked.parse(value);
+        } else if (value && typeof value === 'object') {
+            resultObject[key] = renderMarkdown(value);
+        } else {
+            resultObject[key] = value;
+        }
+    }
+    return resultObject as T;
+};
 
 export const init = async () => {
     const templateFiles = fs.readdirSync(path.join(__dirname, "/templates"));
@@ -26,9 +42,13 @@ export const close = async () => {
 }
 
 export const DocumentGeneratorService = {
-    generatePDF: async (html: string) => {
+    generatePDF: async <TemplateKey extends TemplateKeys>(template: TemplateKey, props: TemplateProps[TemplateKey]) => {
         try {
-            await page.goto(`data:text/html,${html}`, {
+            const htmlContent = templates[template]?.(renderMarkdown(props) as any);
+            if (!htmlContent) {
+                return;
+            }
+            await page.goto(`data:text/html,${htmlContent}`, {
                 waitUntil: ['domcontentloaded', 'load', 'networkidle0'],
             });
             await page.pdf({ path: 'hn.pdf', format: 'a4' });
