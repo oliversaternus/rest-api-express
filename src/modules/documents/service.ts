@@ -8,6 +8,7 @@ import queue from 'queue';
 import { FileService } from '../files/service';
 import { UploadedFile } from 'express-fileupload';
 import { v4 as generateId } from 'uuid';
+import { File } from '../files/types';
 
 let browser: Browser;
 let page: Page;
@@ -51,7 +52,7 @@ export const close = async () => {
 }
 
 export const DocumentGeneratorService = {
-    generatePDF: async <TemplateKey extends TemplateKeys>(template: TemplateKey, props: TemplateProps[TemplateKey], userId: number) => {
+    generatePDF: async <TemplateKey extends TemplateKeys>(template: TemplateKey, props: TemplateProps[TemplateKey], userId: number): Promise<File | undefined> => {
         return new Promise((resolve, reject) => {
             tasks.push(async () => {
                 try {
@@ -66,17 +67,17 @@ export const DocumentGeneratorService = {
                         waitUntil: ['domcontentloaded', 'load', 'networkidle0'],
                     });
                     await page.pdf({ path: tempPath, format: 'a4' });
-                    await FileService.saveFile(
+                    const savedFile = await FileService.saveFile(
                         {
-                            name: 'hn.pdf',
+                            name: `${template}.pdf`,
                             mimetype: 'application/pdf',
                             tempFilePath: tempPath
                         } as UploadedFile,
                         userId
                     );
-                    resolve('hn.pdf');
+                    resolve(savedFile);
                 } catch (e) {
-                    resolve(undefined)
+                    resolve(undefined);
                 }
             });
         })

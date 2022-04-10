@@ -56,7 +56,7 @@ export const FileService = {
 
         return deletedFile?.id;
     },
-    saveFile: async (data: UploadFile, userId: number, description?: string, caption?: string) => {
+    saveFile: async (data: UploadFile, userId: number, description: string = '', caption: string = '') => {
         const fileHash = generateId();
         const fileExtension = extension(data.mimetype);
         const fileSize = data.size || (await fs.stat(data.tempFilePath))?.size * (1024 * 1024);
