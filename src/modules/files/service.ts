@@ -1,10 +1,10 @@
-import { UploadedFile } from 'express-fileupload';
 import { v4 as generateId } from 'uuid';
 import { extension } from 'mime-types';
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
-import { createReadStream } from 'fs';
+import { createReadStream, promises as fs } from 'fs';
 
 import { prisma } from '../../tools/prismaClient';
+import { UploadFile } from './types';
 
 const s3Bucket = process.env.S3_BUCKET;
 const endpoint = process.env.S3_ENDPOINT;
@@ -56,10 +56,10 @@ export const FileService = {
 
         return deletedFile?.id;
     },
-    saveFile: async (data: UploadedFile, info: string, userId: number) => {
+    saveFile: async (data: UploadFile, userId: number, description?: string, caption?: string) => {
         const fileHash = generateId();
         const fileExtension = extension(data.mimetype);
-        const fileInfo = JSON.parse(info);
+        const fileSize = data.size || (await fs.stat(data.tempFilePath))?.size * (1024 * 1024);
 
         if (!fileExtension) {
             return undefined;
@@ -82,12 +82,12 @@ export const FileService = {
         const file = await prisma.file.create({
             data: {
                 name: data.name,
-                size: data.size,
+                size: fileSize,
                 ext: fileExtension,
                 hash: fileHash,
                 mime: data.mimetype,
-                description: fileInfo.description,
-                caption: fileInfo.caption,
+                description: description,
+                caption: caption,
                 url: publicBucketAddress ? `${publicBucketAddress}/${fileHash}.${fileExtension}` : undefined,
                 creatorId: userId,
             }

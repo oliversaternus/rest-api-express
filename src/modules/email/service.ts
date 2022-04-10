@@ -24,6 +24,7 @@ export const init = () => {
         port: Number(smtpPort)
     });
 
+    templates = {};
     const templateFiles = fs.readdirSync(path.join(__dirname, "/templates"));
     templateFiles.forEach((fileName) => {
         const templateString: string = fs.readFileSync(

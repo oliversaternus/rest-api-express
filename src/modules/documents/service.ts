@@ -5,6 +5,9 @@ import handlebars from "handlebars";
 import path from "path";
 import { marked } from 'marked';
 import queue from 'queue';
+import { FileService } from '../files/service';
+import { UploadedFile } from 'express-fileupload';
+import { v4 as generateId } from 'uuid';
 
 let browser: Browser;
 let page: Page;
@@ -29,6 +32,7 @@ const renderMarkdown = <T>(object: T, array?: boolean) => {
 };
 
 export const init = async () => {
+    templates = {};
     const templateFiles = fs.readdirSync(path.join(__dirname, "/templates"));
     templateFiles.forEach((fileName) => {
         const templateString: string = fs.readFileSync(
@@ -47,7 +51,7 @@ export const close = async () => {
 }
 
 export const DocumentGeneratorService = {
-    generatePDF: async <TemplateKey extends TemplateKeys>(template: TemplateKey, props: TemplateProps[TemplateKey]) => {
+    generatePDF: async <TemplateKey extends TemplateKeys>(template: TemplateKey, props: TemplateProps[TemplateKey], userId: number) => {
         return new Promise((resolve, reject) => {
             tasks.push(async () => {
                 try {
@@ -55,10 +59,21 @@ export const DocumentGeneratorService = {
                     if (!htmlContent) {
                         return;
                     }
+                    const tempId = generateId();
+                    const tempPath = path.join('../', '../', '../', 'tmp', tempId);
+
                     await page.goto(`data:text/html,${htmlContent}`, {
                         waitUntil: ['domcontentloaded', 'load', 'networkidle0'],
                     });
-                    await page.pdf({ path: 'hn.pdf', format: 'a4' });
+                    await page.pdf({ path: tempPath, format: 'a4' });
+                    await FileService.saveFile(
+                        {
+                            name: 'hn.pdf',
+                            mimetype: 'application/pdf',
+                            tempFilePath: tempPath
+                        } as UploadedFile,
+                        userId
+                    );
                     resolve('hn.pdf');
                 } catch (e) {
                     resolve(undefined)
