@@ -5,6 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "fix": "eslint -c .eslintrc.json --fix --ext .ts src",
+    "generate": "prisma generate",
     "prebuild": "eslint -c .eslintrc.json --ext .ts src && prisma generate",
     "build": "tsc",
     "prestart": "npm run build",
