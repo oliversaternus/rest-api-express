@@ -6,7 +6,7 @@ import { FileService } from './service';
 import { prisma } from '../../tools/prismaClient';
 import autoCatch from '../../tools/autocatch';
 import { autoVerifyUser } from '../authentication/tools';
-import { FileOrderByWithRelationInput, FileWhereInput, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
 export const fileRouterFactory = () => Router()
 
@@ -16,8 +16,8 @@ export const fileRouterFactory = () => Router()
                 async (req, res) => {
                     const { skip, limit, where, orderBy } = req.query;
                     const files = await prisma.file.findMany({
-                        orderBy: orderBy as Prisma.Enumerable<FileOrderByWithRelationInput>,
-                        where: where as FileWhereInput,
+                        orderBy: orderBy as Prisma.Enumerable<Prisma.FileOrderByWithRelationInput>,
+                        where: where as Prisma.FileWhereInput,
                         skip: Number(skip || 0),
                         take: Number(limit || 24),
                     });
