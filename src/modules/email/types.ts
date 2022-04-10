@@ -6,6 +6,7 @@ export type TemplateProps = {
         verificationLink: string;
         senderUrl: string;
         senderCompanyAddress: string;
+        senderCompanyName: string;
     },
     RESET_PASSWORD: {
         user: string;
