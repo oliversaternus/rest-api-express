@@ -86,8 +86,8 @@ export const FileService = {
                 ext: fileExtension,
                 hash: fileHash,
                 mime: data.mimetype,
-                description: description,
-                caption: caption,
+                description,
+                caption,
                 url: publicBucketAddress ? `${publicBucketAddress}/${fileHash}.${fileExtension}` : undefined,
                 creatorId: userId,
             }
