@@ -1,8 +1,178 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"
+    xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
 
-<body>
-    {{html_Content}}
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{title}}</title>
+    <meta name="x-apple-disable-message-reformatting">
+    <meta name="format-detection" content="telephone=no,address=no,email=no,date=no,url=no">
+    <style>
+        #g1,
+        #g2,
+        #g3 {
+            position: absolute;
+            left: 5mm;
+            height: 0;
+            width: 3mm;
+            border-top: 0.2mm solid #555;
+        }
+
+        #g1 {
+            top: 105mm;
+        }
+
+        #g2 {
+            top: 148.5mm;
+            width: 6mm;
+        }
+
+        #g3 {
+            top: 210mm;
+        }
+
+        #Info {
+            display: none;
+        }
+
+        html {
+            background: #ddd;
+        }
+
+        body {
+            min-width: 205mm;
+            -webkit-text-size-adjust: none;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+        }
+
+        body,
+        .pageset {
+            background: #fff;
+            margin: auto;
+            padding: 0;
+            position: relative;
+            max-width: 210mm;
+            width: 100%;
+            box-sizing: border-box;
+            font-family: Arial;
+            font-size: 14.7px;
+            line-height: 17.0px;
+        }
+
+        .pageset {
+            padding-top: 15mm;
+            margin: 0;
+            padding-left: 25mm;
+            min-height: 281.5mm;
+            display: block;
+            width: 185mm;
+        }
+
+        p {
+            text-align: justify;
+            padding: 0;
+            margin: 0;
+        }
+
+        .pageBreak {
+            clear: all;
+            page-break-before: always;
+            mso-special-character: line-break;
+        }
+
+        table {
+            font-family: Arial;
+            font-size: 14.7px;
+            line-height: 17.0px;
+            margin: 0;
+            width: 100%
+        }
+
+        td {
+            vertical-align: top;
+        }
+
+        @media screen {
+            #Dr {
+                width: 200mm;
+                position: fixed;
+                top: 0;
+                padding: 1mm;
+                border: solid 3px #999;
+                background-color: #ffffddf0;
+                font: 11px arial;
+                z-index: 10;
+            }
+
+            input {
+                font: 14px arial;
+            }
+        }
+    </style>
+    <style media="print">
+        @page {
+            size: auto;
+            margin: 0;
+        }
+
+        #Dr,
+        hr {
+            display: none;
+        }
+
+        html {
+            background: #fff;
+        }
+
+        body {
+            width: 210mm;
+            border: none;
+        }
+
+        .pageBreak {
+            background-color: #fff;
+        }
+
+        .pageset {
+            min-height: initial;
+        }
+    </style>
+</head>
+
+<body style="font-family:Arial;">
+    <div class="pageset">
+        <table cellpadding="0" cellspacing="0" border="0" style="width:100%;padding:0;margin:0;">
+            <tr>
+                <td style="text-align:left">
+                    <p class="design" style="height:10mm;width:1em;padding:0;margin:0;"> </p>
+                    <div style="display:inline-block;font-weight:bold;font-size:16.0px;width:100%;text-align:left;">
+                        {{senderName}}
+                    </div>
+
+
+
+                    <span>{{senderAddress.street}}</span> <span>{{senderAddress.house}}</span><br>
+                    <span>{{senderAddress.zipCode}}</span> <span>{{senderAddress.city}}</span><br>
+                    <br><br><br><br>
+                </td>
+            </tr>
+        </table>
+        <p style="font-size:10px;text-decoration:underline;padding:0;margin:0;">{{senderName}}
+            {{senderAddress.street}} {{senderAddress.house}} {{senderAddress.zipCode}} {{senderAddress.city}}</p>
+        <br>
+        <span>{{recipientName}}</span><br>
+        <span>{{recipientAddress.street}}</span> <span>{{recipientAddress.house}}</span><br>
+        <span>{{recipientAddress.zipCode}}</span> <span>{{recipientAddress.city}}</span><br>
+        <span></span>
+        <br><br><br><br><br><span
+            style="text-align:justify;display:inline-block;width:100%;font-weight:bold;">{{title}}<br></span>
+        <br><br><br>
+        {{html_content}}
+    </div>
+    <br>
 </body>
 
 </html>

@@ -2,7 +2,9 @@ export type TemplateKeys = 'STANDARD_LETTER';
 
 export type TemplateProps = {
     STANDARD_LETTER: {
-        recipient: string;
+        title: string;
+        senderName: string;
+        recipientName: string;
         recipientAddress: {
             country?: string;
             city: string;
@@ -15,7 +17,6 @@ export type TemplateProps = {
             zipCode: string;
             street: string;
         };
-        date: string;
-        html_Content: string;
+        html_content: string;
     }
 }
