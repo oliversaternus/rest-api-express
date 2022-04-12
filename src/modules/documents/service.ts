@@ -47,14 +47,11 @@ export const DocumentGeneratorService = {
                     const tempId = generateId();
                     const tempPath = path.join(__dirname, '../', '../', '../', 'tmp', tempId);
 
-                    console.log('HTML');
-                    console.log(htmlContent);
-
-                    await page.goto(`data:text/html,${htmlContent}`, {
+                    await page.setContent(htmlContent, {
                         waitUntil: ['domcontentloaded', 'load', 'networkidle0'],
                     });
                     await page.emulateMediaType('screen');
-                    await page.pdf({ path: tempPath, format: 'a4', printBackground: true, });
+                    await page.pdf({ path: tempPath, format: 'a4' });
                     const savedFile = await FileService.saveFile(
                         {
                             name: `${template}.pdf`,
