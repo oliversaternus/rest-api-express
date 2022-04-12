@@ -53,7 +53,8 @@ export const DocumentGeneratorService = {
                     await page.goto(`data:text/html,${htmlContent}`, {
                         waitUntil: ['domcontentloaded', 'load', 'networkidle0'],
                     });
-                    await page.pdf({ path: tempPath, format: 'a4' });
+                    await page.emulateMediaType('screen');
+                    await page.pdf({ path: tempPath, format: 'a4', printBackground: true, });
                     const savedFile = await FileService.saveFile(
                         {
                             name: `${template}.pdf`,
