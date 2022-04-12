@@ -3,34 +3,17 @@ import { TemplateKeys, TemplateProps } from "./types";
 import fs from "fs";
 import handlebars from "handlebars";
 import path from "path";
-import { marked } from 'marked';
 import queue from 'queue';
 import { FileService } from '../files/service';
 import { UploadedFile } from 'express-fileupload';
 import { v4 as generateId } from 'uuid';
 import { File } from '../files/types';
+import { resolveSpecialContent } from './tools';
 
 let browser: Browser;
 let page: Page;
 let templates: Partial<{ [key in TemplateKeys]: handlebars.TemplateDelegate<TemplateProps[key]> }> = {};
 let tasks: queue;
-
-const renderMarkdown = <T>(object: T, array?: boolean) => {
-    const resultObject = array ? [] : {};
-    const entries = Object.entries(object);
-    for (const [key, value] of entries) {
-        if (key.startsWith('html_') && typeof value === 'string') {
-            resultObject[key] = marked.parse(value);
-        } else if (Array.isArray(value)) {
-            resultObject[key] = renderMarkdown(value, true);
-        } else if (value instanceof Object) {
-            resultObject[key] = renderMarkdown(value);
-        } else {
-            resultObject[key] = value;
-        }
-    }
-    return resultObject as T;
-};
 
 export const init = async () => {
     templates = {};
@@ -56,7 +39,8 @@ export const DocumentGeneratorService = {
         return new Promise((resolve, reject) => {
             tasks.push(async () => {
                 try {
-                    const htmlContent = templates[template]?.(renderMarkdown(props) as any);
+                    const resolvedProps = await resolveSpecialContent(props);
+                    const htmlContent = templates[template]?.(resolvedProps as any);
                     if (!htmlContent) {
                         return;
                     }
