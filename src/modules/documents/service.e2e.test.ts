@@ -1,6 +1,6 @@
 import { start, stop } from '../../app';
 import { Server } from 'http';
-import { DocumentGeneratorService, init } from './service';
+import { DocumentGeneratorService, init, close } from './service';
 
 let server: Server;
 
@@ -11,6 +11,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+    await close();
     await stop(server);
 });
 
@@ -52,5 +53,7 @@ describe('test document generation', () => {
 
         expect(file).toBeTruthy();
 
-    });
+        // await FileService.deleteFile(file.id);
+
+    }, 30 * 10000);
 });

@@ -45,7 +45,10 @@ export const DocumentGeneratorService = {
                         return;
                     }
                     const tempId = generateId();
-                    const tempPath = path.join('../', '../', '../', 'tmp', tempId);
+                    const tempPath = path.join(__dirname, '../', '../', '../', 'tmp', tempId);
+
+                    console.log('HTML');
+                    console.log(htmlContent);
 
                     await page.goto(`data:text/html,${htmlContent}`, {
                         waitUntil: ['domcontentloaded', 'load', 'networkidle0'],
@@ -61,6 +64,7 @@ export const DocumentGeneratorService = {
                     );
                     resolve(savedFile);
                 } catch (e) {
+                    console.error(e);
                     resolve(undefined);
                 }
             });

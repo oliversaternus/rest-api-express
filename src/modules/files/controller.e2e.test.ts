@@ -74,7 +74,7 @@ describe('test files', () => {
 
         const downloadDeletedResponse = await fetch(String(createResponse.data?.url));
         expect(downloadDeletedResponse.status).not.toBe(200);
-    });
+    }, 30 * 1000);
 
     test('Query files', async () => {
 
