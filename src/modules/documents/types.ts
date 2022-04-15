@@ -1,4 +1,4 @@
-export type TemplateKeys = 'STANDARD_LETTER';
+export type TemplateKeys = 'STANDARD_LETTER' | 'QR_CODE_GRID';
 
 export type TemplateProps = {
     STANDARD_LETTER: {
@@ -18,5 +18,12 @@ export type TemplateProps = {
             street: string;
         };
         html_content: string;
+    };
+    QR_CODE_GRID: {
+        title: string;
+        codes: Array<{
+            title: string;
+            qrcode_payload: string;
+        }>
     }
 }

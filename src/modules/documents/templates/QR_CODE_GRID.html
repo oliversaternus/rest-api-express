@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"
+    xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{title}}</title>
+    <meta name="x-apple-disable-message-reformatting">
+    <meta name="format-detection" content="telephone=no,address=no,email=no,date=no,url=no">
+    <style>
+        html {
+            background: #ddd;
+        }
+
+        body {
+            min-width: 205mm;
+            -webkit-text-size-adjust: none;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+        }
+
+        body,
+        .pageset {
+            background: #fff;
+            margin: auto;
+            padding: 0;
+            position: relative;
+            max-width: 210mm;
+            width: 100%;
+            box-sizing: border-box;
+            font-family: Arial;
+            font-size: 14.7px;
+            line-height: 17.0px;
+        }
+
+        .pageset {
+            padding-top: 10mm;
+            margin: 0;
+            padding-left: 25mm;
+            min-height: 281.5mm;
+            display: block;
+            width: 185mm;
+        }
+
+        p {
+            text-align: justify;
+            padding: 0;
+            margin: 0;
+        }
+
+        table {
+            font-family: Arial;
+            font-size: 14.7px;
+            line-height: 17.0px;
+            margin: 0;
+            width: 100%
+        }
+
+        td {
+            vertical-align: top;
+        }
+
+        @media screen {
+            input {
+                font: 14px arial;
+            }
+        }
+    </style>
+    <style media="print">
+        @page {
+            size: auto;
+            margin: 0;
+        }
+
+        html {
+            background: #fff;
+        }
+
+        body {
+            width: 210mm;
+            border: none;
+        }
+
+        .pageset {
+            min-height: initial;
+        }
+    </style>
+</head>
+
+<body style="font-family:Arial;">
+    <div class="pageset" style="display: flex; flex-wrap: wrap;">
+        {{#codes}}
+        <div
+            style="width: 33.333%; padding: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-sizing: border-box;">
+            {{{qrcode_payload}}}
+            <div style="font-size: 20px;">
+                {{title}}
+            </div>
+        </div>
+        {{/codes}}
+    </div>
+</body>
+
+</html>
