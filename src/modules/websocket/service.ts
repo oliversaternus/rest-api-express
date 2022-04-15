@@ -1,11 +1,15 @@
 import { Server as SocketIO } from "socket.io";
 import { Server } from 'http';
 import { decryptUser } from "../authentication/tools";
+import { createAdapter } from '@socket.io/cluster-adapter';
+import { setupWorker } from '@socket.io/sticky';
 
 let io: SocketIO;
 
 export const init = async (server: Server) => {
     io = new SocketIO(server);
+    io.adapter(createAdapter());
+    setupWorker(io);
 
     io.use((socket, next) => {
         try {

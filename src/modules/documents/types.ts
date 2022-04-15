@@ -21,9 +21,9 @@ export type TemplateProps = {
     };
     QR_CODE_GRID: {
         title: string;
-        codes: Array<{
+        codes: {
             title: string;
             qrcode_payload: string;
-        }>
+        }[]
     }
 }
