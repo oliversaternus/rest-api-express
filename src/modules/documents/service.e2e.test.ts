@@ -62,39 +62,39 @@ describe('test document generation', () => {
             title: 'Lorem Ipsum',
             codes: [
                 {
-                    title: 'Lorem Ipsum 1',
+                    title: '123-4567',
                     qrcode_payload: 'https://google.com?q=Lorem+Ipsum'
                 },
                 {
-                    title: 'Lorem Ipsum 2',
+                    title: '234-5678',
                     qrcode_payload: 'https://google.com?q=Lorem+Ipsum+2'
                 },
                 {
-                    title: 'Lorem Ipsum 3',
+                    title: '456-7890',
                     qrcode_payload: 'https://google.com?q=Lorem+Ipsum+3'
                 },
                 {
-                    title: 'Lorem Ipsum 4',
+                    title: '678-90123',
                     qrcode_payload: 'https://google.com?q=Lorem+Ipsum+4'
                 },
                 {
-                    title: 'Lorem Ipsum 5',
+                    title: '432-10987',
                     qrcode_payload: 'https://google.com?q=Lorem+Ipsum+5'
                 },
                 {
-                    title: 'Lorem Ipsum 6',
+                    title: '789-12345',
                     qrcode_payload: 'https://google.com?q=Lorem+Ipsum+6'
                 },
                 {
-                    title: 'Lorem Ipsum 7',
+                    title: '567-7890',
                     qrcode_payload: 'https://google.com?q=Lorem+Ipsum+7'
                 },
                 {
-                    title: 'Lorem Ipsum 8',
+                    title: '890-1234',
                     qrcode_payload: 'https://google.com?q=Lorem+Ipsum+8'
                 },
                 {
-                    title: 'Lorem Ipsum 9',
+                    title: '901-2345',
                     qrcode_payload: 'https://google.com?q=Lorem+Ipsum+9'
                 }
             ]

@@ -36,7 +36,7 @@
         }
 
         .pageset {
-            padding-top: 10mm;
+            padding-top: 15mm;
             margin: 0;
             padding-left: 25mm;
             min-height: 281.5mm;
@@ -86,20 +86,26 @@
         .pageset {
             min-height: initial;
         }
+
+        .qrcode {
+            break-inside: avoid;
+        }
     </style>
 </head>
 
 <body style="font-family:Arial;">
-    <div class="pageset" style="display: flex; flex-wrap: wrap;">
-        {{#codes}}
-        <div
-            style="width: 33.333%; padding: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-sizing: border-box;">
-            {{{qrcode_payload}}}
-            <div style="font-size: 20px;">
-                {{title}}
+    <div class="pageset">
+        <div style="width:100%; display: grid; grid-template-columns: auto auto auto; column-gap: 20px; row-gap: 24px;">
+            {{#codes}}
+            <div class="qrcode"
+                style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                {{{qrcode_payload}}}
+                <div style="font-size: 20px;">
+                    {{title}}
+                </div>
             </div>
+            {{/codes}}
         </div>
-        {{/codes}}
     </div>
 </body>
 
