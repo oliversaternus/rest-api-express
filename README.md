@@ -110,9 +110,9 @@ SMTP_EMAIL_ADDRESS={smtp email address if differs from user}
 
 3. Create a environment file for the prisma client. It must be named `.env` and located in the prisma folder `PROJECT_NAME/prisma`. This file defines the database-URL that the application connects to. The project default is to use Sqlite as the main database. You can use the `example.env` file as a reference.
 
-4. Adjust the `seed.ts` file in the prisma folder. It will fill the database with the initial data once it is created. [Prisma Seeding](https://www.prisma.io/docs/guides/database/seed-database)
+4. Adjust the `seed.ts` file in the prisma folder. It will fill the database with the initial data once it is created. See [Prisma Seeding](https://www.prisma.io/docs/guides/database/seed-database)
 
-5. Run initial migration. [Prisma Migration](https://www.prisma.io/docs/concepts/components/prisma-migrate)
+5. Run initial migration. See [Prisma Migration](https://www.prisma.io/docs/concepts/components/prisma-migrate)
 
 6. Build the project for production.
 ```bash
