@@ -1,7 +1,7 @@
 # rest-api-express
-a showcase rest api with nodeJS, express, prisma...
+**a showcase rest api with nodeJS, express, prisma and more**
 
-This is a good starter project for creating a new rest-api. The features that can be reused or adjusted includes:
+This is a good starting point for creating a new rest-api. Features that can be reused or adjusted include:
 
 - JWT authentication
 - CRUD actions
