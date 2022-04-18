@@ -11,7 +11,7 @@ export const userRouterFactory = () => Router()
 
     .get('/',
         autoCatch(
-            autoVerifyUser([UserRole.Admin])(
+            autoVerifyUser([UserRole.Admin, UserRole.Superadmin])(
                 async (req, res, currentUser, next) => {
                     const { skip, limit, where = {}, orderBy } = req.query;
                     const users = await prisma.user.findMany({
@@ -60,7 +60,7 @@ export const userRouterFactory = () => Router()
 
     .get('/:id',
         autoCatch(
-            autoVerifyUser([UserRole.Admin])(
+            autoVerifyUser([UserRole.Admin, UserRole.Superadmin])(
                 async (req, res, currentUser, next) => {
                     const user = await prisma.user.findUnique({
                         where: {
@@ -155,7 +155,7 @@ export const userRouterFactory = () => Router()
 
     .put('/:id',
         autoCatch(
-            autoVerifyUser([UserRole.Admin])(
+            autoVerifyUser([UserRole.Admin, UserRole.Superadmin])(
                 async (req, res, currentUser, next) => {
                     const { name, email, role, active } = req.body;
 

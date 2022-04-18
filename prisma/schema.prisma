@@ -7,15 +7,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Company {
+  id        Int      @id @default(autoincrement())
+  name      String?
+  active    Boolean  @default(true)
+  users     User[]
+  files     File[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model User {
-  id       Int       @id @default(autoincrement())
-  email    String    @unique
-  name     String?
-  password String?
-  role     String    @default("user")
-  active   Boolean   @default(true)
-  sessions Session[]
-  files    File[]
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  name      String?
+  password  String?
+  role      String    @default("user")
+  active    Boolean   @default(true)
+  sessions  Session[]
+  files     File[]
+  company   Company?  @relation(fields: [companyId], references: [id])
+  companyId Int?
 }
 
 model Session {
@@ -42,9 +54,20 @@ model File {
   updatedAt   DateTime @updatedAt
   createdBy   User?    @relation(fields: [creatorId], references: [id])
   creatorId   Int?
+  Company     Company? @relation(fields: [companyId], references: [id])
+  companyId   Int?
 }
 
 model Store {
   key   String @id
   value String
+}
+
+model CompanyConfirmation {
+  id        Int      @id @default(autoincrement())
+  token     String
+  email     String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
