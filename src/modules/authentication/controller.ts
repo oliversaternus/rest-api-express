@@ -38,12 +38,12 @@ export const authenticationRouterFactory = () => Router()
                 });
 
                 const token: string = jwt.sign(
-                    { data: { id: user.id, role: user.role } as UserContext },
+                    { data: { id: user.id, companyId: user.companyId, role: user.role } as UserContext },
                     authSecret,
                     { expiresIn: 30 * 60 * 1000 });
 
                 const refreshToken: string = jwt.sign(
-                    { data: { id: user.id, role: user.role, sessionId: session.id } as RefreshContext },
+                    { data: { id: user.id, companyId: user.companyId, role: user.role, sessionId: session.id } as RefreshContext },
                     refreshSecret,
                     { expiresIn: 30 * 24 * 60 * 60 * 1000 });
 
@@ -85,7 +85,7 @@ export const authenticationRouterFactory = () => Router()
                     });
 
                     const token: string = jwt.sign(
-                        { data: { id: user.id, role: user.role } },
+                        { data: { id: user.id, companyId: user.companyId, role: user.role } },
                         authSecret,
                         { expiresIn: 30 * 60 * 1000 });
 

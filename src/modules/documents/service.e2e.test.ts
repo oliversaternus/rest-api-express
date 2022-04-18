@@ -48,12 +48,12 @@ describe('test document generation', () => {
             <br/>
             At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
             no sea takimata sanctus est Lorem ipsum dolor sit amet.`
-        }, 1);
+        }, 1, 1);
 
         expect(file).toBeTruthy();
 
         if (file) {
-            await FileService.deleteFile(file.id);
+            await FileService.deleteFile(file.id, 1);
         }
     }, 30 * 10000);
 
@@ -98,12 +98,12 @@ describe('test document generation', () => {
                     qrcode_payload: 'https://google.com?q=Lorem+Ipsum+9'
                 }
             ]
-        }, 1);
+        }, 1, 1);
 
         expect(file).toBeTruthy();
 
         if (file) {
-            await FileService.deleteFile(file.id);
+            await FileService.deleteFile(file.id, 1);
         }
     }, 30 * 10000);
 });

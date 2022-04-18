@@ -16,7 +16,7 @@
       "lib": ["es2017"]
     },
     "include": [
-      "src", "test/auth", "test/utils.ts", "test/files", "test/users"
+      "src"
     ],
     "exclude": [
       "node_modules",

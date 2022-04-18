@@ -3,6 +3,15 @@ const hashJS = require("hash.js");
 
 const prisma = new PrismaClient()
 
+const companyData = [
+    {
+        name: 'Lorem Ipsum Company'
+    },
+    {
+        name: 'Another Company'
+    }
+]
+
 const userData = [
     {
         name: 'John Doe',
@@ -59,10 +68,23 @@ const johnFilesData = [
 
 async function main() {
     console.log(`Start seeding ...`)
+    let loremIpsumCompanyId = 0;
+    for (const company of companyData) {
+        const createdCompany = await prisma.company.create({
+            data: company,
+        })
+        if (createdCompany.name === 'Lorem Ipsum Company') {
+            loremIpsumCompanyId = createdCompany.id;
+        }
+        console.log(`Created company with id: ${createdCompany.id}`)
+    }
     let johnDoeUserId = 0;
     for (const user of userData) {
         const createdUser = await prisma.user.create({
-            data: user,
+            data: {
+                ...user,
+                companyId: loremIpsumCompanyId
+            },
         })
         if (createdUser.name === 'John Doe') {
             johnDoeUserId = createdUser.id;
@@ -73,7 +95,8 @@ async function main() {
         const createdFile = await prisma.file.create({
             data: {
                 ...file,
-                creatorId: johnDoeUserId
+                creatorId: johnDoeUserId,
+                companyId: loremIpsumCompanyId
             },
         })
         console.log(`Created file with id: ${createdFile.id}`)

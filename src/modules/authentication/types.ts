@@ -6,12 +6,14 @@ export enum UserRole {
 
 export interface RefreshContext {
     id: number;
+    companyId: number;
     role: UserRole;
     sessionId: number;
 }
 
 export interface UserContext {
     id: number;
+    companyId: number;
     role: UserRole;
 }
 

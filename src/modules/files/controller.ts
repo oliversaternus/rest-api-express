@@ -46,7 +46,7 @@ export const fileRouterFactory = () => Router()
         autoCatch(
             autoVerifyUser()(
                 async (req, res, currentUser, next) => {
-                    const deletedId = await FileService.deleteFile(Number(req.params.id));
+                    const deletedId = await FileService.deleteFile(Number(req.params.id), currentUser.companyId);
                     res.status(200).json({ deletedId });
                 }
             )
@@ -93,7 +93,7 @@ export const fileRouterFactory = () => Router()
                     }
 
                     const { description, caption } = JSON.parse(info) || {};
-                    const file = await FileService.saveFile(data, currentUser.id, description, caption);
+                    const file = await FileService.saveFile(data, currentUser.id, currentUser.companyId, description, caption);
 
                     if (!file) {
                         next({ statusCode: 500, message: 'File could not be saved' });

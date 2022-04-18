@@ -35,7 +35,7 @@ export const close = async () => {
 }
 
 export const DocumentGeneratorService = {
-    generatePDF: async <TemplateKey extends TemplateKeys>(template: TemplateKey, props: TemplateProps[TemplateKey], userId: number): Promise<File | undefined> => {
+    generatePDF: async <TemplateKey extends TemplateKeys>(template: TemplateKey, props: TemplateProps[TemplateKey], userId: number, companyId: number): Promise<File | undefined> => {
         return new Promise((resolve, reject) => {
             tasks.push(async () => {
                 try {
@@ -58,7 +58,8 @@ export const DocumentGeneratorService = {
                             mimetype: 'application/pdf',
                             tempFilePath: tempPath
                         } as UploadedFile,
-                        userId
+                        userId,
+                        companyId
                     );
                     resolve(savedFile);
                 } catch (e) {
