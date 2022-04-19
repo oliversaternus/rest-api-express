@@ -2,7 +2,7 @@ import { start, stop } from '../../app';
 import { Server } from 'http';
 import { DocumentGeneratorService, init, close } from './service';
 import { FileService } from '../files/service';
-import { v4 as generateId } from 'uuid';
+import prisma from '../../tools/prismaClient';
 
 let server: Server;
 
@@ -20,7 +20,12 @@ afterAll(async () => {
 
 describe('test document generation', () => {
     test('create PDF file', async () => {
-        const uuid = generateId();
+        const user = await prisma.user.findFirst();
+        expect(user).toBeTruthy();
+        if(!user){
+            return;
+        }
+
         const file = await DocumentGeneratorService.generatePDF('STANDARD_LETTER', {
             title: 'Lorem Ipsum',
             senderName: 'John Doe',
@@ -50,17 +55,22 @@ describe('test document generation', () => {
             <br/>
             At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
             no sea takimata sanctus est Lorem ipsum dolor sit amet.`
-        }, uuid, uuid);
+        }, user.id, user.companyId);
 
         expect(file).toBeTruthy();
 
         if (file) {
-            await FileService.deleteFile(file.id, uuid);
+            await FileService.deleteFile(file.id, user.companyId);
         }
     }, 30 * 10000);
 
     test('create QR codes file', async () => {
-        const uuid = generateId();
+        const user = await prisma.user.findFirst();
+        expect(user).toBeTruthy();
+        if(!user){
+            return;
+        }
+
         const file = await DocumentGeneratorService.generatePDF('QR_CODE_GRID', {
             title: 'Lorem Ipsum',
             codes: [
@@ -101,12 +111,12 @@ describe('test document generation', () => {
                     qrcode_payload: 'https://google.com?q=Lorem+Ipsum+9'
                 }
             ]
-        }, uuid, uuid);
+        }, user.id, user.companyId);
 
         expect(file).toBeTruthy();
 
         if (file) {
-            await FileService.deleteFile(file.id, uuid);
+            await FileService.deleteFile(file.id, user.companyId);
         }
     }, 30 * 10000);
 });

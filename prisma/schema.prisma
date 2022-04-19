@@ -26,8 +26,8 @@ model User {
   active    Boolean   @default(true)
   sessions  Session[]
   files     File[]
-  company   Company?  @relation(fields: [companyId], references: [id])
-  companyId String?
+  company   Company   @relation(fields: [companyId], references: [id])
+  companyId String
 }
 
 model Session {
@@ -52,10 +52,10 @@ model File {
   mime        String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  createdBy   User?    @relation(fields: [creatorId], references: [id])
+  createdBy   User?     @relation(fields: [creatorId], references: [id])
   creatorId   String?
-  Company     Company? @relation(fields: [companyId], references: [id])
-  companyId   String?
+  Company     Company  @relation(fields: [companyId], references: [id])
+  companyId   String
 }
 
 model Store {

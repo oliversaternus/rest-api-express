@@ -15,9 +15,9 @@ export const userRouterFactory = () => Router()
                 async (req, res, currentUser, next) => {
                     const { skip, limit, where = {}, orderBy = [] } = req.query;
                     const users = await prisma.user.findMany({
-                        orderBy: orderBy as Prisma.Enumerable<Prisma.FileOrderByWithRelationInput>,
+                        orderBy: orderBy as Prisma.Enumerable<Prisma.UserOrderByWithRelationInput>,
                         where: {
-                            ...(where as Prisma.FileWhereInput),
+                            ...(where as Prisma.UserWhereInput),
                             password: undefined,
                             companyId: currentUser.companyId
                         },

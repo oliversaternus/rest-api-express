@@ -65,8 +65,11 @@ describe('test files', () => {
             caption: 'Bananas'
         });
         expect(updateResponse.status).toBe(200);
-        expect(updateResponse.data?.caption).toBe('Bananas');
-        expect(updateResponse.data?.description).toBe('very tasty');
+
+        const updatedResponse = await client.invokeApi<File>('GET', `/files/${createResponse.data?.id}`);
+        expect(updatedResponse.status).toBe(200);
+        expect(updatedResponse.data?.caption).toBe('Bananas');
+        expect(updatedResponse.data?.description).toBe('very tasty');
 
         // DELETE
         const deleteResponse = await client.invokeApi('DELETE', `/files/${createResponse.data?.id}`);
