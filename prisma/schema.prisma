@@ -20,7 +20,8 @@ model Company {
 model User {
   id        String    @id @default(uuid())
   email     String    @unique
-  name      String?
+  firstName String?
+  lastName  String?
   password  String?
   role      String    @default("user")
   active    Boolean   @default(true)
@@ -52,7 +53,7 @@ model File {
   mime        String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  createdBy   User?     @relation(fields: [creatorId], references: [id])
+  createdBy   User?    @relation(fields: [creatorId], references: [id])
   creatorId   String?
   Company     Company  @relation(fields: [companyId], references: [id])
   companyId   String
@@ -64,10 +65,13 @@ model Store {
 }
 
 model CompanyConfirmation {
-  id        String   @id @default(uuid())
-  token     String
-  email     String
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String   @id @default(uuid())
+  token         String
+  email         String
+  companyName   String
+  userFirstName String
+  userLastName  String
+  userPassword  String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }

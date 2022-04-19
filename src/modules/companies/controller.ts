@@ -6,6 +6,14 @@ import { UserRole } from '../authentication/types';
 import { prisma } from '../../tools/prismaClient'
 import { Prisma } from '@prisma/client';
 import { v4 as generateId } from 'uuid';
+import { EmailService } from '../email/service';
+import hashJS from "hash.js";
+
+const hostUrl = process.env.HOST;
+const imprintCompanyName = process.env.IMPRINT_COMPANY_NAME;
+const imprintCompanyUrl = process.env.IMPRINT_COMPANY_URL;
+const imprintCompanyAddress = process.env.IMPRINT_COMPANY_ADDRESS;
+const redirectUrl = process.env.COMPANY_CREATED_REDIRECT_URL;
 
 export const userRouterFactory = () => Router()
 
@@ -75,9 +83,9 @@ export const userRouterFactory = () => Router()
     .post('/',
         autoCatch(
             async (req, res, next) => {
-                const {name, email} = req.body;
+                const {companyName, userFirstName, userLastName, userPassword, email} = req.body;
 
-                if(!name || !email){
+                if(!companyName || !email){
                     next({ statusCode: 400 });
                     return;
                 }
@@ -93,13 +101,61 @@ export const userRouterFactory = () => Router()
                     return;
                 }
 
+                const existingConfirmation = await prisma.companyConfirmation.findFirst({
+                    where: {
+                        email: String(email)
+                    }
+                });
+
+                // if company is already in registration process, only resend email
+                if(existingConfirmation){
+                    // TODO: Use new company verification template
+                    const resendResult = await EmailService.sendEmail('ACCOUNT_VERIFICATION', {
+                        title: 'Verify your account',
+                        user: `${existingConfirmation.userFirstName} ${existingConfirmation.userLastName}`,
+                        verificationLink: `${hostUrl}/companies/confirmation/${existingConfirmation.token}`,
+                        senderUrl: imprintCompanyUrl || '',
+                        senderCompanyName: imprintCompanyName || '',
+                        senderCompanyAddress: imprintCompanyAddress || ''
+                    }, 'Verify your account', existingConfirmation.email);
+
+                    if(!resendResult){
+                        next({ statusCode: 500 });
+                        return;
+                    }
+    
+                    res.sendStatus(200);
+                    return;
+                }
+
+                // create new confirmation request
+
+                const confirmationToken = generateId();
                 const companyConfirmationRequest = await prisma.companyConfirmation.create({
                     data: {
-                        name,
-                        email,
-                        token: generateId()
+                        companyName: String(companyName),
+                        userFirstName: String(userFirstName),
+                        userLastName: String(userLastName),
+                        userPassword: hashJS.sha256().update(String(userPassword)).digest("hex"),
+                        email: String(email),
+                        token: confirmationToken
                     }
-                })
+                });
+
+                // TODO: Use new company verification template
+                const sendResult = await EmailService.sendEmail('ACCOUNT_VERIFICATION', {
+                    title: 'Verify your account',
+                    user: `${userFirstName} ${userLastName}`,
+                    verificationLink: `${hostUrl}/companies/confirmation/${confirmationToken}`,
+                    senderUrl: imprintCompanyUrl || '',
+                    senderCompanyName: imprintCompanyName || '',
+                    senderCompanyAddress: imprintCompanyAddress || ''
+                }, 'Verify your account', email);
+
+                if(!sendResult){
+                    next({ statusCode: 500 });
+                    return;
+                }
 
                 res.json(companyConfirmationRequest);
             }
@@ -107,7 +163,8 @@ export const userRouterFactory = () => Router()
     )
     
     // confirm new company
-    .post('/:token',
+    // this is a get to be easily accessible from anchor tags in the verification email
+    .get('/confirmation/:token',
         autoCatch(
             async (req, res, next) => {
                 const {token} = req.params;
@@ -139,9 +196,35 @@ export const userRouterFactory = () => Router()
                     return;
                 }
 
-                // TODO: create company and admin user + delete confirmations
+                const company = await prisma.company.create({
+                    data: {
+                        name: confirmation.companyName
+                    }
+                });
 
-                res.json();
+                const admin = await prisma.user.create({
+                    data: {
+                        firstName: confirmation.userFirstName,
+                        lastName: confirmation.userLastName,
+                        email: confirmation.email,
+                        password: confirmation.userPassword,
+                        companyId: company.id,
+                        role: UserRole.Admin
+                    }
+                });
+
+                const deleteResult = await prisma.companyConfirmation.deleteMany({
+                    where: {
+                        email: confirmation.email
+                    }
+                });
+
+                if(!company || !admin || !deleteResult.count){
+                    next({ statusCode: 500 });
+                    return;
+                }
+
+                res.redirect(redirectUrl || '');
             }
         )
     );

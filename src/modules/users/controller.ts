@@ -26,7 +26,8 @@ export const userRouterFactory = () => Router()
                         select: {
                             id: true,
                             email: true,
-                            name: true,
+                            firstName: true,
+                            lastName: true,
                             role: true,
                             active: true
                         }
@@ -48,7 +49,8 @@ export const userRouterFactory = () => Router()
                         select: {
                             id: true,
                             email: true,
-                            name: true,
+                            firstName: true,
+                            lastName: true,
                             role: true,
                             sessions: true
                         }
@@ -71,7 +73,8 @@ export const userRouterFactory = () => Router()
                         select: {
                             id: true,
                             email: true,
-                            name: true,
+                            firstName: true,
+                            lastName: true,
                             role: true,
                             sessions: true
                         }

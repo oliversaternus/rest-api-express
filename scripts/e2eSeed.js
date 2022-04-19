@@ -14,13 +14,15 @@ const companyData = [
 
 const userData = [
     {
-        name: 'John Doe',
+        firstName: 'John',
+        lastName: 'Doe',
         email: 'johndoe@test.com',
         password: hashJS.sha256().update('123456').digest("hex"),
         role: 'admin'
     },
     {
-        name: 'Jane Doe',
+        firstName: 'Jane',
+        lastName: 'Doe',
         email: 'janedoe@test.com',
         password: hashJS.sha256().update('654321').digest("hex"),
         role: 'admin'
@@ -86,7 +88,7 @@ async function main() {
                 companyId: loremIpsumCompanyId
             },
         })
-        if (createdUser.name === 'John Doe') {
+        if (createdUser.firstName === 'John' && createdUser.lastName === 'Doe') {
             johnDoeUserId = createdUser.id;
         }
         console.log(`Created user with id: ${createdUser.id}`)
