@@ -5,15 +5,15 @@ export enum UserRole {
 }
 
 export interface RefreshContext {
-    id: number;
-    companyId: number;
+    id: string;
+    companyId: string;
     role: UserRole;
-    sessionId: number;
+    sessionId: string;
 }
 
 export interface UserContext {
-    id: number;
-    companyId: number;
+    id: string;
+    companyId: string;
     role: UserRole;
 }
 

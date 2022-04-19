@@ -13,12 +13,13 @@ export const userRouterFactory = () => Router()
         autoCatch(
             autoVerifyUser([UserRole.Admin, UserRole.Superadmin])(
                 async (req, res, currentUser, next) => {
-                    const { skip, limit, where = {}, orderBy } = req.query;
+                    const { skip, limit, where = {}, orderBy = [] } = req.query;
                     const users = await prisma.user.findMany({
                         orderBy: orderBy as Prisma.Enumerable<Prisma.FileOrderByWithRelationInput>,
                         where: {
                             ...(where as Prisma.FileWhereInput),
-                            password: undefined
+                            password: undefined,
+                            companyId: currentUser.companyId
                         },
                         skip: Number(skip || 0),
                         take: Number(limit || 24),
@@ -62,9 +63,10 @@ export const userRouterFactory = () => Router()
         autoCatch(
             autoVerifyUser([UserRole.Admin, UserRole.Superadmin])(
                 async (req, res, currentUser, next) => {
-                    const user = await prisma.user.findUnique({
+                    const user = await prisma.user.findFirst({
                         where: {
-                            id: Number(req.params.id)
+                            id: String(req.params.id),
+                            companyId: currentUser.companyId
                         },
                         select: {
                             id: true,
@@ -158,10 +160,17 @@ export const userRouterFactory = () => Router()
             autoVerifyUser([UserRole.Admin, UserRole.Superadmin])(
                 async (req, res, currentUser, next) => {
                     const { name, email, role, active } = req.body;
+                    const userId = req.params.id;
 
-                    const updatedUser = await prisma.user.update({
+                    if (!userId) {
+                        next({ statusCode: 400 });
+                        return;
+                    }
+
+                    const updatedUser = await prisma.user.updateMany({
                         where: {
-                            id: currentUser.id
+                            id: String(userId),
+                            companyId: currentUser.companyId
                         },
                         data: {
                             ...(!!name && { name: String(name) }),
@@ -171,12 +180,12 @@ export const userRouterFactory = () => Router()
                         }
                     })
 
-                    if (!updatedUser) {
+                    if (!updatedUser.count) {
                         next({ statusCode: 404 });
                         return;
                     }
 
-                    res.json({ updatedId: updatedUser.id });
+                    res.json({ updatedId: userId });
                 }
             )
         )

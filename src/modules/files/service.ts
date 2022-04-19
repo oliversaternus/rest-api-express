@@ -22,7 +22,7 @@ const credentials = {
 const s3Client = new S3Client({ region, endpoint, credentials, forcePathStyle });
 
 export const FileService = {
-    deleteFile: async (id: number, companyId: number) => {
+    deleteFile: async (id: string, companyId: string) => {
         if (!id) {
             return undefined;
         }
@@ -56,7 +56,7 @@ export const FileService = {
 
         return deletedFile?.id;
     },
-    saveFile: async (data: UploadFile, userId: number, companyId: number, description: string = '', caption: string = '') => {
+    saveFile: async (data: UploadFile, userId: string, companyId: string, description: string = '', caption: string = '') => {
         const fileHash = generateId();
         const fileExtension = extension(data.mimetype);
         const fileSize = data.size || (await fs.stat(data.tempFilePath))?.size * (1024 * 1024);

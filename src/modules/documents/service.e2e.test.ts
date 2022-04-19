@@ -2,6 +2,7 @@ import { start, stop } from '../../app';
 import { Server } from 'http';
 import { DocumentGeneratorService, init, close } from './service';
 import { FileService } from '../files/service';
+import { v4 as generateId } from 'uuid';
 
 let server: Server;
 
@@ -19,6 +20,7 @@ afterAll(async () => {
 
 describe('test document generation', () => {
     test('create PDF file', async () => {
+        const uuid = generateId();
         const file = await DocumentGeneratorService.generatePDF('STANDARD_LETTER', {
             title: 'Lorem Ipsum',
             senderName: 'John Doe',
@@ -48,16 +50,17 @@ describe('test document generation', () => {
             <br/>
             At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
             no sea takimata sanctus est Lorem ipsum dolor sit amet.`
-        }, 1, 1);
+        }, uuid, uuid);
 
         expect(file).toBeTruthy();
 
         if (file) {
-            await FileService.deleteFile(file.id, 1);
+            await FileService.deleteFile(file.id, uuid);
         }
     }, 30 * 10000);
 
     test('create QR codes file', async () => {
+        const uuid = generateId();
         const file = await DocumentGeneratorService.generatePDF('QR_CODE_GRID', {
             title: 'Lorem Ipsum',
             codes: [
@@ -98,12 +101,12 @@ describe('test document generation', () => {
                     qrcode_payload: 'https://google.com?q=Lorem+Ipsum+9'
                 }
             ]
-        }, 1, 1);
+        }, uuid, uuid);
 
         expect(file).toBeTruthy();
 
         if (file) {
-            await FileService.deleteFile(file.id, 1);
+            await FileService.deleteFile(file.id, uuid);
         }
     }, 30 * 10000);
 });

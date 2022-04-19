@@ -34,7 +34,7 @@ export const userRouterFactory = () => Router()
                 async (req, res, currentUser, next) => {
                     const company = await prisma.company.findUnique({
                         where: {
-                            id: Number(req.params.id)
+                            id: String(req.params.id)
                         }
                     })
                     res.json(company);
