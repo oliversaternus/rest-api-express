@@ -27,7 +27,7 @@ export const init = async () => {
 
     browser = await puppeteer.launch();
     page = await browser.newPage();
-    tasks = queue({ autostart: true });
+    tasks = queue({ autostart: true, concurrency: 1 });
 };
 
 export const close = async () => {
